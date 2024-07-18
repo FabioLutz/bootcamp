@@ -1,6 +1,6 @@
 package main.java.com.bootcamp.dominio;
 
-public class Curso extends Conteudo{
+public class Curso extends Conteudo {
     private int cargaHoraria;
 
     public Curso() {

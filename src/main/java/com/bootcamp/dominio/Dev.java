@@ -2,6 +2,7 @@ package main.java.com.bootcamp.dominio;
 
 import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 public class Dev {
@@ -46,12 +47,22 @@ public class Dev {
         return Objects.hash(nome, conteudosInscritos, conteudosConcluidos);
     }
 
-    // TODO: Possibilitar se inscrever no bootcamp selecionado
-    public void inscreverBootcamp(Bootcamp bootcamp) {}
+    public void inscreverBootcamp(Bootcamp bootcamp) {
+        this.conteudosInscritos.addAll(bootcamp.getConteudos());
+        bootcamp.getDevsInscritos().add(this);
+    }
 
-    // TODO: Medir progressão do bootcamp
-    public void progredir() {}
+    public void progredir() {
+        Optional<Conteudo> conteudo = this.conteudosInscritos.stream().findFirst();
+        if (conteudo.isPresent()) {
+            this.conteudosConcluidos.add(conteudo.get());
+            this.conteudosInscritos.remove(conteudo.get());
+        } else {
+            System.err.println("Você não está matriculado em nenhum conteúdo");
+        }
+    }
 
-    // TODO: Quanto de XP que o dev conseguiu de acordo com a progressão do bootcamp
-    public void calcularXpTotal() {}
+    public double calcularXpTotal() {
+        return this.conteudosConcluidos.stream().mapToDouble(Conteudo::calcularXp).sum();
+    }
 }
